@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BoxComponent } from '@app/components/box-component/box.component';
 import { ContentExplorerComponent } from '@app/pages/content-explorer/content-explorer.component';
 import { ContentUploaderComponent } from '@app/pages/content-uploader/content-uploader.component';
+import { ContentPreviewComponent } from '@app/pages/content-preview/content-preview.component';
 import { HeadService } from '@app/services/head.service';
 
 @NgModule({
@@ -12,7 +13,8 @@ import { HeadService } from '@app/services/head.service';
     AppComponent,
     BoxComponent,
     ContentExplorerComponent,
-    ContentUploaderComponent
+    ContentUploaderComponent,
+    ContentPreviewComponent
   ],
   imports: [
     BrowserModule,

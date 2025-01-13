@@ -2,6 +2,7 @@ import { Component, Renderer2, Input, AfterViewInit } from '@angular/core';
 import { environment } from '@environment/environment';
 import { HeadService } from '@app/services/head.service';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
+const _ = require('lodash');
 
 declare let Box: any;
 
@@ -9,7 +10,8 @@ export interface BoxComponentInterface {
   folderId: string;
   boxCdnJS: string;
   boxCdnCss: string;
-  name: BoxComponentsType
+  name: BoxComponentsType;
+  options: any
 }
 
 @Component({
@@ -23,7 +25,8 @@ export class BoxComponent implements AfterViewInit {
     folderId: '',
     boxCdnJS: '',
     boxCdnCss: '',
-    name: BoxComponentsType.ContentExplorer
+    name: BoxComponentsType.ContentExplorer,
+    options: null
   };
 
   constructor(
@@ -64,12 +67,13 @@ export class BoxComponent implements AfterViewInit {
     }
   }
 
-  private initializeComponent(): void {
+  private initializeComponent(): void { 
     const boxComponentInstance = new Box[this.componentData.name]();
 
-    boxComponentInstance.show(this.componentData.folderId, environment.BoxDeveloperToken, {
-      container: `#${this.componentData.name.toLowerCase()}`
-    });
+    let opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
+    console.log("Opts:",JSON.stringify(opts));
+
+    boxComponentInstance.show(this.componentData.folderId, environment.BoxDeveloperToken, opts);
   }
 }
 

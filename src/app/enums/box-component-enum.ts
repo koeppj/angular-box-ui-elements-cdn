@@ -4,5 +4,5 @@ export enum BoxComponentsType {
     ContentPicker = 'ContentPicker',
     ContentSidebar = 'ContentSidebar',
     ContentUploader = 'ContentUploader',
-    ContentPreview = 'ContentPreview'
+    ContentPreview = 'ContentPreview',
 }
