@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    BoxDeveloperToken: 'Nkq39vbzROWOv2OYSAFNHnRPVVNnOlEx',
+    BoxDeveloperToken: 'ShtsYZGLuQF81OgMznGEQIChfmgia1J3',
     BoxPreviewFileID: '1724709767500'
 };
