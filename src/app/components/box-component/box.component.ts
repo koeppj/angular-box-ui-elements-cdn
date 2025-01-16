@@ -1,7 +1,11 @@
-import { Component, Renderer2, Input, AfterViewInit } from '@angular/core';
+import { Component, Renderer2, Input, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { environment } from '@environment/environment';
 import { HeadService } from '@app/services/head.service';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
+import { Observable, Subscription } from 'rxjs';
+import { BoxTokenService } from '@app/services/box-token.service';
+import { BoxJwtAccessTokenService } from '@app/services/box-jwt-access-token.service';
+import { AccessToken } from 'box-typescript-sdk-gen/lib/schemas/accessToken.generated';
 const _ = require('lodash');
 
 declare let Box: any;
@@ -20,7 +24,7 @@ export interface BoxComponentInterface {
   styleUrls: ['./box.component.scss']
 })
 
-export class BoxComponent implements AfterViewInit {
+export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() componentData: BoxComponentInterface = {
     folderId: '',
     boxCdnJS: '',
@@ -28,11 +32,38 @@ export class BoxComponent implements AfterViewInit {
     name: BoxComponentsType.ContentExplorer,
     options: null
   };
+  boxToken!: string;
+  private subscription!: Subscription;
+  private opts!: any;
+  private boxComponentInstance!: any;
+  private accessToken!: Observable<AccessToken>;
 
   constructor(
     private renderer: Renderer2,
     private headService: HeadService,
+    private boxTokenService: BoxTokenService,
+    private boxJwtAuthService: BoxJwtAccessTokenService
   ) { }
+
+  ngOnInit(): void {
+      this.subscription = this.boxTokenService.boxToken$.subscribe(value => {
+        this.boxToken = value;
+        console.log("Reloading Component!!!")
+        this.reloadCompent();
+      });
+      /*
+      this.boxJwtAuthService.getAccessToken().subscribe(value => {
+        this.boxToken = value.accessToken!;
+        console.log("Reloading Component!!!")
+        this.reloadCompent();
+
+      });
+      */
+  }
+
+  ngOnDestroy(): void {
+      this.subscription.unsubscribe;
+  }
 
   ngAfterViewInit() {
     if (this.componentData.name) {
@@ -68,12 +99,19 @@ export class BoxComponent implements AfterViewInit {
   }
 
   private initializeComponent(): void { 
-    const boxComponentInstance = new Box[this.componentData.name]();
+    this.boxComponentInstance = new Box[this.componentData.name]();
 
-    let opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
-    console.log("Opts:",JSON.stringify(opts));
+    this.opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
 
-    boxComponentInstance.show(this.componentData.folderId, environment.BoxDeveloperToken, opts);
+    this.boxComponentInstance.show(this.componentData.folderId, this.boxToken, this.opts);
   }
+
+  private reloadCompent(): void {
+    if (this.boxComponentInstance) {
+      this.boxComponentInstance.hide();
+      this.boxComponentInstance.show(this.componentData.folderId, this.boxToken, this.opts);
+    }
+  }
+
 }
 

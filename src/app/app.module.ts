@@ -7,6 +7,10 @@ import { ContentExplorerComponent } from '@app/pages/content-explorer/content-ex
 import { ContentUploaderComponent } from '@app/pages/content-uploader/content-uploader.component';
 import { ContentPreviewComponent } from '@app/pages/content-preview/content-preview.component';
 import { HeadService } from '@app/services/head.service';
+import { BoxDevTokenPromptComponent } from './components/box-dev-token-prompt/box-dev-token-prompt.component';
+import { BoxTokenService } from './services/box-token.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BoxJwtAccessTokenService } from './services/box-jwt-access-token.service';
 
 @NgModule({
   declarations: [
@@ -14,14 +18,18 @@ import { HeadService } from '@app/services/head.service';
     BoxComponent,
     ContentExplorerComponent,
     ContentUploaderComponent,
-    ContentPreviewComponent
+    ContentPreviewComponent,
+    BoxDevTokenPromptComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [
-    HeadService
+    HeadService,
+    BoxTokenService,
+    BoxJwtAccessTokenService
   ],
   bootstrap: [AppComponent]
 })
