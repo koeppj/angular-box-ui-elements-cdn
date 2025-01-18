@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { BoxTokenService } from '@app/services/box-token.service';
 import { BoxJwtAccessTokenService } from '@app/services/box-jwt-access-token.service';
 import { AccessToken } from 'box-typescript-sdk-gen/lib/schemas/accessToken.generated';
+import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 const _ = require('lodash');
 
 declare let Box: any;
@@ -32,7 +33,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
     name: BoxComponentsType.ContentExplorer,
     options: null
   };
-  boxToken!: string;
+  boxToken: string | undefined;
   private subscription!: Subscription;
   private opts!: any;
   private boxComponentInstance!: any;
@@ -41,12 +42,11 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(
     private renderer: Renderer2,
     private headService: HeadService,
-    private boxTokenService: BoxTokenService,
-    private boxJwtAuthService: BoxJwtAccessTokenService
+    private boxTokenService: BoxOauthTokenService
   ) { }
 
   ngOnInit(): void {
-      this.subscription = this.boxTokenService.boxToken$.subscribe(value => {
+      this.subscription = this.boxTokenService.accessToken$.subscribe(value => {
         this.boxToken = value;
         console.log("Reloading Component!!!")
         this.reloadCompent();
@@ -62,7 +62,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.subscription.unsubscribe;
+      this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

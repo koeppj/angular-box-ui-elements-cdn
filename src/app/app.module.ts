@@ -11,6 +11,9 @@ import { BoxDevTokenPromptComponent } from './components/box-dev-token-prompt/bo
 import { BoxTokenService } from './services/box-token.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BoxJwtAccessTokenService } from './services/box-jwt-access-token.service';
+import { PreBoxLoginComponent } from './pages/pre-box-login/pre-box-login.component';
+import { PostBoxLoginComponent } from './pages/post-box-login/post-box-login.component';
+import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth-status.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { BoxJwtAccessTokenService } from './services/box-jwt-access-token.servic
     ContentExplorerComponent,
     ContentUploaderComponent,
     ContentPreviewComponent,
-    BoxDevTokenPromptComponent
+    BoxDevTokenPromptComponent,
+    PreBoxLoginComponent,
+    PostBoxLoginComponent,
+    BoxOauthStatusComponent
   ],
   imports: [
     BrowserModule,

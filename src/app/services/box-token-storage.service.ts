@@ -8,15 +8,29 @@ import { AccessToken } from 'box-typescript-sdk-gen/lib/schemas/accessToken.gene
 })
 export class BoxTokenStorageService  implements TokenStorage {
 
+  public static keyName = "NLRB Storage";
+
   constructor() { }
   store(token: AccessToken): Promise<undefined> {
-    throw new Error('Method not implemented.');
+    localStorage.setItem(BoxTokenStorageService.keyName,JSON.stringify(token));
+    return Promise.resolve(undefined);
   }
   get(): Promise<undefined | AccessToken> {
-    throw new Error('Method not implemented.');
+    let tokenStr = localStorage.getItem(BoxTokenStorageService.keyName);
+    if (tokenStr) {
+      return Promise.resolve(JSON.parse(tokenStr))
+    }
+    else {
+      return Promise.resolve(undefined);
+    }
   }
   clear(): Promise<undefined> {
-    throw new Error('Method not implemented.');
+    localStorage.removeItem(BoxTokenStorageService.keyName);
+    return Promise.resolve(undefined);
+  }
+
+  tokenPresent(): Promise<boolean> {
+    return Promise.resolve(localStorage.getItem(BoxTokenStorageService.keyName) !== null);
   }
 
 }

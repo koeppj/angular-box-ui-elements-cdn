@@ -1,0 +1,16 @@
+<div class="auth-stat-container">
+    <div class="auth-stat-item">
+        <button (click)="onLogin()">Login to Box</button>
+    </div>
+    <div class="auth-stat-item">
+        <label for="accessToken">Access Token:</label>
+        <input type="text" id="accessToken" [value]="boxOAuthService.accessToken$ | async" readonly>
+    </div>
+    <div class="auth-stat-item">
+        <label for="authMessage">Auth Message:</label>
+        <input type="text" id="authMessage" [value]="boxOAuthService.authMessage$ | async" readonly>
+    </div>
+    <div class="auth-stat-item">
+        
+    </div>
+ </div>
