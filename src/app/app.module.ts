@@ -14,6 +14,7 @@ import { BoxJwtAccessTokenService } from './services/box-jwt-access-token.servic
 import { PreBoxLoginComponent } from './pages/pre-box-login/pre-box-login.component';
 import { PostBoxLoginComponent } from './pages/post-box-login/post-box-login.component';
 import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth-status.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     HeadService,
