@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
 
 @Component({
-  selector: 'content-uploader',
-  templateUrl: './content-uploader.component.html',
-  styleUrls: ['./content-uploader.component.scss']
+    selector: 'content-uploader',
+    templateUrl: './content-uploader.component.html',
+    styleUrls: ['./content-uploader.component.scss'],
+    standalone: false
 })
 
 export class ContentUploaderComponent {

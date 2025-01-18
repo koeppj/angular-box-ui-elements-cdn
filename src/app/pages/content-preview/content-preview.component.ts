@@ -3,9 +3,10 @@ import { BoxComponentsType } from '@app/enums/box-component-enum';
 import { environment } from '@environment/environment';
 
 @Component({
-  selector: 'content-Preview',
-  templateUrl: './content-preview.component.html',
-  styleUrls: ['./content-preview.component.scss']
+    selector: 'content-Preview',
+    templateUrl: './content-preview.component.html',
+    styleUrls: ['./content-preview.component.scss'],
+    standalone: false
 })
 
 export class ContentPreviewComponent {

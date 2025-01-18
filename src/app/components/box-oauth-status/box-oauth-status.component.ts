@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 
 @Component({
-  selector: 'app-box-oauth-status',
-  templateUrl: './box-oauth-status.component.html',
-  styleUrls: ['./box-oauth-status.component.scss']
+    selector: 'app-box-oauth-status',
+    templateUrl: './box-oauth-status.component.html',
+    styleUrls: ['./box-oauth-status.component.scss'],
+    standalone: false
 })
 export class BoxOauthStatusComponent {
 

@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BoxTokenService } from '@app/services/box-token.service';
 
 @Component({
-  selector: 'app-box-dev-token-prompt',
-  templateUrl: './box-dev-token-prompt.component.html',
-  styleUrls: ['./box-dev-token-prompt.component.scss']
+    selector: 'app-box-dev-token-prompt',
+    templateUrl: './box-dev-token-prompt.component.html',
+    styleUrls: ['./box-dev-token-prompt.component.scss'],
+    standalone: false
 })
 export class BoxDevTokenPromptComponent {
 

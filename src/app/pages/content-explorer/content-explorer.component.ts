@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
 
 @Component({
-  selector: 'content-explorer',
-  templateUrl: './content-explorer.component.html',
-  styleUrls: ['./content-explorer.component.scss']
+    selector: 'content-explorer',
+    templateUrl: './content-explorer.component.html',
+    styleUrls: ['./content-explorer.component.scss'],
+    standalone: false
 })
 
 export class ContentExplorerComponent {

@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 
 @Component({
-  selector: 'app-pre-box-login',
-  templateUrl: './pre-box-login.component.html',
-  styleUrls: ['./pre-box-login.component.scss']
+    selector: 'app-pre-box-login',
+    templateUrl: './pre-box-login.component.html',
+    styleUrls: ['./pre-box-login.component.scss'],
+    standalone: false
 })
 export class PreBoxLoginComponent implements OnInit {
 

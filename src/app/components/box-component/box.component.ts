@@ -20,9 +20,10 @@ export interface BoxComponentInterface {
 }
 
 @Component({
-  selector: 'box-component',
-  templateUrl: './box.component.html',
-  styleUrls: ['./box.component.scss']
+    selector: 'box-component',
+    templateUrl: './box.component.html',
+    styleUrls: ['./box.component.scss'],
+    standalone: false
 })
 
 export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
