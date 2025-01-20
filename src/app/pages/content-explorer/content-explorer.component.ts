@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
+import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 
 @Component({
     selector: 'content-explorer',
@@ -11,10 +12,28 @@ import { BoxComponentsType } from '@app/enums/box-component-enum';
 export class ContentExplorerComponent {
   contentExplorer = {
     folderId: '0',
-    // Get CDN links from https://developer.box.com/guides/embed/ui-elements/installation/#manual-installation
-    boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/21.0.0/en-US/explorer.js',
-    boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/21.0.0/en-US/explorer.css',
+    boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/explorer.js',
+    boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/explorer.css',
     name: BoxComponentsType.ContentExplorer,
-    options: null
+    options: {
+      contentPreviewProps: {
+        contentSidebarProps: {
+          detailsSidebarProps: {
+            hasProperties: true,
+            hasAccessStats: true
+          },
+          hasMetadata: true,
+          hasActivityFeed: true,
+        }
+      },
+      canShare: false,
+      onPreview: this.onExplorerPreview
+    }
+  }
+
+  constructor(public boxOAuthService: BoxOauthTokenService) {}
+
+  public onExplorerPreview(file: any) {
+    console.log(file);
   }
 }

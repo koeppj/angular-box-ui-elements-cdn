@@ -1,1 +1,1 @@
-<box-component [componentData]="contentPreview"></box-component>
+<box-component [accessToken]="(boxOAuthService.accessToken$ | async) ?? ''" [componentData]="contentPreview"></box-component>

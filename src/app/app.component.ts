@@ -8,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-box-ui-elements-cdn';
+
+  public doLogin() {
+    const popup = window.open(
+      '/pre-login',
+      '_blank',
+      'width=600,height=700'
+    )
+  }
 }

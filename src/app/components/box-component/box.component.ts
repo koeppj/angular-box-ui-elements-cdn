@@ -1,12 +1,7 @@
-import { Component, Renderer2, Input, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
-import { environment } from '@environment/environment';
+import { Component, Renderer2, Input, AfterViewInit, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { HeadService } from '@app/services/head.service';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
-import { Observable, Subscription } from 'rxjs';
-import { BoxTokenService } from '@app/services/box-token.service';
-import { BoxJwtAccessTokenService } from '@app/services/box-jwt-access-token.service';
-import { AccessToken } from 'box-typescript-sdk-gen/lib/schemas/accessToken.generated';
-import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
+import { Subscription } from 'rxjs';
 const _ = require('lodash');
 
 declare let Box: any;
@@ -26,7 +21,8 @@ export interface BoxComponentInterface {
     standalone: false
 })
 
-export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
+export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
+  @Input() accessToken: string | undefined = '';
   @Input() componentData: BoxComponentInterface = {
     folderId: '',
     boxCdnJS: '',
@@ -38,35 +34,25 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   private subscription!: Subscription;
   private opts!: any;
   private boxComponentInstance!: any;
-  private accessToken!: Observable<AccessToken>;
 
   constructor(
     private renderer: Renderer2,
     private headService: HeadService,
-    private boxTokenService: BoxOauthTokenService
   ) { }
 
-  ngOnInit(): void {
-      this.subscription = this.boxTokenService.accessToken$.subscribe(value => {
-        this.boxToken = value;
-        console.log("Reloading Component!!!")
-        this.reloadCompent();
-      });
-      /*
-      this.boxJwtAuthService.getAccessToken().subscribe(value => {
-        this.boxToken = value.accessToken!;
-        console.log("Reloading Component!!!")
-        this.reloadCompent();
 
-      });
-      */
+  ngOnChanges(changes: SimpleChanges): void {
+    console.debug(`In ngOnChanges with accessToken ${this.accessToken}`);
+    this.reloadCompent();
   }
 
-  ngOnDestroy(): void {
-      this.subscription.unsubscribe();
+  ngOnInit(): void {
+    console.debug(`In ngOnInit with accessToken ${this.accessToken}`);
+    this.reloadCompent()
   }
 
   ngAfterViewInit() {
+    console.debug("in ngAfterViewInit...");
     if (this.componentData.name) {
       this.loadJs(this.componentData.boxCdnJS)
       this.loadCss(this.componentData.boxCdnCss)
@@ -83,6 +69,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private loadJs(src: string):void {
+    console.debug("loadHs...");
     if (src === '') return
     if (this.headService.isScriptLoaded(src)) {
       this.initializeComponent()
@@ -100,17 +87,17 @@ export class BoxComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private initializeComponent(): void { 
+    console.debug("initializeComponent...");
     this.boxComponentInstance = new Box[this.componentData.name]();
 
     this.opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
-
-    this.boxComponentInstance.show(this.componentData.folderId, this.boxToken, this.opts);
+    this.boxComponentInstance.show(this.componentData.folderId, this.accessToken, this.opts);
   }
 
   private reloadCompent(): void {
     if (this.boxComponentInstance) {
       this.boxComponentInstance.hide();
-      this.boxComponentInstance.show(this.componentData.folderId, this.boxToken, this.opts);
+      this.boxComponentInstance.show(this.componentData.folderId, this.accessToken, this.opts);
     }
   }
 

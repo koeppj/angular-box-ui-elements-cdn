@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AppRoutingModule } from '@app/app-routing.module';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { BoxTokenStorageService } from './box-token-storage.service';
 import { BoxClient, BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen';
 import { environment } from '@environment/environment';
-import { AccessToken } from 'box-typescript-sdk-gen/lib/schemas/accessToken.generated';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -26,6 +24,7 @@ export class BoxOauthTokenService {
 
   boxClient!: BoxClient;
   boxOAuth: BoxOAuth;
+  private refreshTokenInterval: any;
 
   constructor(private router: Router, 
               private boxTokenStorage: BoxTokenStorageService) {
@@ -43,12 +42,31 @@ export class BoxOauthTokenService {
     })
 
     window.addEventListener('storage', (event) => {
-      if (event.key !== BoxTokenStorageService.keyName && event.key !== null) {
-        console.log("Logging Captured...");
+      if (event.key !== boxTokenStorage.storageKeyName() && event.key !== null) {
         return;
       }
-      this.refreshToken();
+      if (event.newValue === null && event.oldValue !== null) {
+        this.setStatusToLoggedOff("Logged off...");
+      } else if (event.key === null && event.oldValue === null) {
+        this.setStatusToLoggedOff("Logged off...");
+      } else {
+        this.refreshToken();
+      }
     })
+
+    this.refreshTokenInterval = setInterval(() => {
+      /*
+       Only try to refesh of the token if a login cookie is 
+       is present
+      */
+      this.boxTokenStorage.tokenPresent().then(present => {
+        if (present) {
+          this.refreshToken();
+        }        
+      }).catch(err => {
+        this.authMessageSubject$.next(`Error checking for token:${err.message}`);
+      });
+    }, environment.BoxAccessTokenRefreshInterval * 60 * 1000); // 40 minutes in milliseconds  
   }
 
   public getAuthURL(redirectUri: string): string {
@@ -59,14 +77,12 @@ export class BoxOauthTokenService {
     await this.boxOAuth.getTokensAuthorizationCodeGrant(code)
     .then(token => {
       this.boxClient = new BoxClient({auth: this.boxOAuth});
-      this.authMessageSubject$.next("Authenticaed");
+      this.authMessageSubject$.next("Authenticaed...");
       this.accessTokenSubject$.next(token.accessToken);
       this.isAuthenticatedSubect$.next(true);
     })
     .catch(error => {
-      this.authMessageSubject$.next(error.message);
-      this.accessTokenSubject$.next(undefined);
-      this.isAuthenticatedSubect$.next(false);
+      this.setStatusToLoggedOff(error.message)
     });
   }
 
@@ -75,10 +91,14 @@ export class BoxOauthTokenService {
       this.isAuthenticatedSubect$.next(true);
       this.accessTokenSubject$.next(token.accessToken)
       this.authMessageSubject$.next("Token Retrieved...");
-    }).catch(err => {
-      this.isAuthenticatedSubect$.next(false);
-      this.accessTokenSubject$.next(undefined);
-      this.authMessageSubject$.next(err.message);
+    }).catch(error => {
+      this.setStatusToLoggedOff(error.message);
     })
-  }            
+  }
+
+  private setStatusToLoggedOff(authMessage: string) {
+    this.isAuthenticatedSubect$.next(false);
+    this.accessTokenSubject$.next(undefined);
+    this.authMessageSubject$.next(authMessage)
+  }
 }
