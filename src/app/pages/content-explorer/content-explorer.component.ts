@@ -6,12 +6,11 @@ import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
     selector: 'content-explorer',
     templateUrl: './content-explorer.component.html',
     styleUrls: ['./content-explorer.component.scss'],
-    standalone: false
+    standalone: false,
 })
 
 export class ContentExplorerComponent {
   contentExplorer = {
-    folderId: '0',
     boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/explorer.js',
     boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/explorer.css',
     name: BoxComponentsType.ContentExplorer,
@@ -26,14 +25,21 @@ export class ContentExplorerComponent {
           hasActivityFeed: true,
         }
       },
+      contentOpenWithProps: { show: true },
       canShare: false,
       onPreview: this.onExplorerPreview
     }
   }
 
+  public folderId = '0';
+
   constructor(public boxOAuthService: BoxOauthTokenService) {}
 
   public onExplorerPreview(file: any) {
     console.log(file);
+  }
+
+  public onFolderIdChange(folderId: string) {
+    this.folderId = folderId;
   }
 }

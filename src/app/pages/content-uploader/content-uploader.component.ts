@@ -10,8 +10,9 @@ import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 })
 
 export class ContentUploaderComponent {
+
+  public folderId = '0';
   contentUploader = {
-    folderId: '0',
     // Get CDN links from https://developer.box.com/guides/embed/ui-elements/installation/#manual-installation
     boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/uploader.js',
     boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/uploader.css',
@@ -21,4 +22,9 @@ export class ContentUploaderComponent {
 
   constructor(public boxOAuthService: BoxOauthTokenService) {}
 
+  public onFolderIdChange(folderId: string) {
+    this.folderId = folderId;
+  }
 }
+
+

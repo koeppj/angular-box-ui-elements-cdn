@@ -7,7 +7,6 @@ const _ = require('lodash');
 declare let Box: any;
 
 export interface BoxComponentInterface {
-  folderId: string;
   boxCdnJS: string;
   boxCdnCss: string;
   name: BoxComponentsType;
@@ -23,8 +22,8 @@ export interface BoxComponentInterface {
 
 export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() accessToken: string | undefined = '';
+  @Input() entityId: string | undefined = '0';
   @Input() componentData: BoxComponentInterface = {
-    folderId: '',
     boxCdnJS: '',
     boxCdnCss: '',
     name: BoxComponentsType.ContentExplorer,
@@ -91,13 +90,15 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     this.boxComponentInstance = new Box[this.componentData.name]();
 
     this.opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
-    this.boxComponentInstance.show(this.componentData.folderId, this.accessToken, this.opts);
+    if (this.accessToken !== undefined) {
+      this.boxComponentInstance.show(this.entityId, this.accessToken, this.opts);
+    }
   }
 
   private reloadCompent(): void {
     if (this.boxComponentInstance) {
       this.boxComponentInstance.hide();
-      this.boxComponentInstance.show(this.componentData.folderId, this.accessToken, this.opts);
+      this.boxComponentInstance.show(this.entityId, this.accessToken, this.opts);
     }
   }
 

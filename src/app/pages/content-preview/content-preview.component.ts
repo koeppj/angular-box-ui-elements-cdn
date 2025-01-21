@@ -11,8 +11,10 @@ import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 })
 
 export class ContentPreviewComponent {
+
+  fileId = environment.BoxPreviewFileID;
+
   contentPreview = {
-    folderId: environment.BoxPreviewFileID,
     // Get CDN links from https://developer.box.com/guides/embed/ui-elements/installation/#manual-installation
     boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/preview.js',
     boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/preview.css',
@@ -28,5 +30,10 @@ export class ContentPreviewComponent {
   }
 
   constructor(public boxOAuthService: BoxOauthTokenService) {}
+
+  public onFileIdChange(folderId: string) {
+    this.fileId = folderId;
+  }
+
 
 }

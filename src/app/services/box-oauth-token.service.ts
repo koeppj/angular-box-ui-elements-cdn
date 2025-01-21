@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { BoxTokenStorageService } from './box-token-storage.service';
-import { BoxClient, BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen';
+import { BoxClient, BoxDeveloperTokenAuth, BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen';
 import { environment } from '@environment/environment';
 import { Router } from '@angular/router';
+import { GetBoxSkillCardsOnFileHeaders } from 'box-typescript-sdk-gen/lib/managers/skills.generated';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class BoxOauthTokenService {
   private authMessageSubject$ = new BehaviorSubject<string>('');
   public authMessage$ = this.authMessageSubject$.asObservable();
 
-  boxClient!: BoxClient;
+  public boxClient!: BoxClient;
   boxOAuth: BoxOAuth;
   private refreshTokenInterval: any;
 
@@ -34,10 +35,12 @@ export class BoxOauthTokenService {
       tokenStorage: boxTokenStorage
     })
     this.boxOAuth = new BoxOAuth({config: oAuthConfig});
+    this.boxClient = new BoxClient({auth: this.boxOAuth});
 
     this.boxTokenStorage.tokenPresent().then(present => {
       if (present) {
-        this.refreshToken()
+        console.log("Refeshing on Init");
+        this.refreshToken()     
       }
     })
 
@@ -45,11 +48,17 @@ export class BoxOauthTokenService {
       if (event.key !== boxTokenStorage.storageKeyName() && event.key !== null) {
         return;
       }
+      if (event.key === undefined) {
+        return;
+      }
       if (event.newValue === null && event.oldValue !== null) {
         this.setStatusToLoggedOff("Logged off...");
-      } else if (event.key === null && event.oldValue === null) {
+      } else if (event.newValue === null && event.oldValue === null) {
         this.setStatusToLoggedOff("Logged off...");
+      } else if (event.newValue !== null && event.oldValue !== null) {
+        this.authMessageSubject$.next("Token refreshed...");
       } else {
+        console.log("Refreshing Token after Event!");
         this.refreshToken();
       }
     })
@@ -60,7 +69,9 @@ export class BoxOauthTokenService {
        is present
       */
       this.boxTokenStorage.tokenPresent().then(present => {
+        console.debug("Starting Token Refresh...");
         if (present) {
+          console.log("Refreshing Token!");
           this.refreshToken();
         }        
       }).catch(err => {
@@ -70,27 +81,38 @@ export class BoxOauthTokenService {
   }
 
   public getAuthURL(redirectUri: string): string {
-    return this.boxOAuth.getAuthorizeUrl({redirectUri: redirectUri});
+    let url = this.boxOAuth.getAuthorizeUrl({redirectUri: redirectUri});
+    console.log(url);
+    return url;
   }
 
   public async validateCode(code: string)  {
-    await this.boxOAuth.getTokensAuthorizationCodeGrant(code)
-    .then(token => {
-      this.boxClient = new BoxClient({auth: this.boxOAuth});
-      this.authMessageSubject$.next("Authenticaed...");
-      this.accessTokenSubject$.next(token.accessToken);
-      this.isAuthenticatedSubect$.next(true);
-    })
-    .catch(error => {
+    await this.boxOAuth.getTokensAuthorizationCodeGrant(code).then(token => {
+      if (token.accessToken) {
+        let devToken = new BoxDeveloperTokenAuth({token: token.accessToken});
+        this.boxClient = new BoxClient({auth: devToken});
+        this.authMessageSubject$.next("Authenticated...");
+        this.accessTokenSubject$.next(token.accessToken);
+        this.isAuthenticatedSubect$.next(true);
+      } else {
+        this.setStatusToLoggedOff("Missing Access Token");
+      }
+    }).catch(error => {
       this.setStatusToLoggedOff(error.message)
     });
   }
 
   private refreshToken() {
     this.boxOAuth.refreshToken().then(token => {
-      this.isAuthenticatedSubect$.next(true);
-      this.accessTokenSubject$.next(token.accessToken)
-      this.authMessageSubject$.next("Token Retrieved...");
+      if (token.accessToken) {
+        let devToken = new BoxDeveloperTokenAuth({token: token.accessToken});
+        this.boxClient = new BoxClient({auth: devToken});
+        this.authMessageSubject$.next("Token Refreshed");
+        this.accessTokenSubject$.next(token.accessToken);
+        this.isAuthenticatedSubect$.next(true);
+      } else {
+        this.setStatusToLoggedOff("Missing Access Token");
+      }
     }).catch(error => {
       this.setStatusToLoggedOff(error.message);
     })

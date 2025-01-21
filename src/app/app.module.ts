@@ -15,6 +15,8 @@ import { PreBoxLoginComponent } from './pages/pre-box-login/pre-box-login.compon
 import { PostBoxLoginComponent } from './pages/post-box-login/post-box-login.component';
 import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth-status.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BoxFolderInputComponent } from "./components/box-folder-input/box-folder-input.component";
+import { BoxFileInputComponent } from './components/box-file-input/box-file-input.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    NgbModule
-  ],
+    NgbModule,
+    BoxFolderInputComponent,
+    BoxFileInputComponent
+],
   providers: [
     HeadService,
     BoxTokenService,
