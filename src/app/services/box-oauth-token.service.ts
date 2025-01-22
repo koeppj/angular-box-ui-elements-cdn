@@ -6,9 +6,7 @@ import { environment } from '@environment/environment';
 import { Router } from '@angular/router';
 import { GetBoxSkillCardsOnFileHeaders } from 'box-typescript-sdk-gen/lib/managers/skills.generated';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class BoxOauthTokenService {
 
   private isAuthenticatedSubect$ = new BehaviorSubject<boolean>(false);

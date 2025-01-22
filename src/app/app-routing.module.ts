@@ -6,6 +6,7 @@ import { ContentPreviewComponent } from './pages/content-preview/content-preview
 import { PreBoxLoginComponent } from './pages/pre-box-login/pre-box-login.component';
 import { PostBoxLoginComponent } from './pages/post-box-login/post-box-login.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ContentUploadMetadataComponent } from './pages/content-upload-metadata/content-upload-metadata.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'content-explorer', component: ContentExplorerComponent },
   { path: 'content-uploader', component: ContentUploaderComponent },
   { path: 'content-preview', component: ContentPreviewComponent },
+  { path: 'content-upload-metadata', component: ContentUploadMetadataComponent },
   { path: 'pre-login', component: PreBoxLoginComponent },
   { path: 'post-login', component: PostBoxLoginComponent }
 ];

@@ -17,12 +17,17 @@ import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BoxFolderInputComponent } from "./components/box-folder-input/box-folder-input.component";
 import { BoxFileInputComponent } from './components/box-file-input/box-file-input.component';
+import { ContentUploadMetadataComponent } from './pages/content-upload-metadata/content-upload-metadata.component';
+import { DisplayBoxResponseModule } from './components/display-box-response/display-box-response.module';
+import { DisplayBoxResponseService } from './components/display-box-response/display-box-service.service';
+import { BoxOauthTokenService } from './services/box-oauth-token.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoxComponent,
     ContentExplorerComponent,
+    ContentUploadMetadataComponent,
     ContentUploaderComponent,
     ContentPreviewComponent,
     BoxDevTokenPromptComponent,
@@ -36,12 +41,14 @@ import { BoxFileInputComponent } from './components/box-file-input/box-file-inpu
     ReactiveFormsModule,
     NgbModule,
     BoxFolderInputComponent,
-    BoxFileInputComponent
+    BoxFileInputComponent,
+    DisplayBoxResponseModule,
 ],
   providers: [
     HeadService,
     BoxTokenService,
-    BoxJwtAccessTokenService
+    BoxJwtAccessTokenService,
+    BoxOauthTokenService
   ],
   bootstrap: [AppComponent]
 })

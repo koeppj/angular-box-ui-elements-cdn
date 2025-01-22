@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
 import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
+import { File } from 'box-typescript-sdk-gen/lib/schemas/file.generated';
 import { environment } from '@environment/environment';
 
 @Component({
-    selector: 'content-uploader',
-    templateUrl: './content-uploader.component.html',
-    styleUrls: ['./content-uploader.component.scss'],
-    standalone: false
+  selector: 'app-content-upload-metadata',
+  templateUrl: './content-upload-metadata.component.html',
+  styleUrl: './content-upload-metadata.component.scss',
+  standalone: false
 })
-
-export class ContentUploaderComponent {
+export class ContentUploadMetadataComponent {
 
   public folderId = '0';
   contentUploader = {
@@ -18,7 +18,9 @@ export class ContentUploaderComponent {
     boxCdnJS: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/uploader.js',
     boxCdnCss: 'https://cdn01.boxcdn.net/platform/elements/22.0.0/en-US/uploader.css',
     name: BoxComponentsType.ContentUploader,
-    options: null
+    options: {
+      onComplete: this.onFileUpload
+    }
   }
 
   constructor(public boxOAuthService: BoxOauthTokenService) {}
@@ -26,6 +28,9 @@ export class ContentUploaderComponent {
   public onFolderIdChange(folderId: string) {
     this.folderId = folderId;
   }
+
+  public onFileUpload(file: Array<File>) {
+    console.log('File uploaded', file);
+  }
+
 }
-
-
