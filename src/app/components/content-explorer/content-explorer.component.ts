@@ -26,29 +26,19 @@ export class ContentExplorerComponent  {
   private opts!: any;
   private boxComponentInstance!: any;
 
-  constructor(
-    private renderer: Renderer2,
-    private headService: HeadService,
-  ) 
-  {    
-    console.log("Constructing COntentExplorerComponent");
-  }
-
+  constructor(private renderer: Renderer2,private headService: HeadService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.debug(`In ngOnChanges with accessToken ${this.accessToken}`);
     this.reloadCompent();
   }
 
   ngOnInit(): void {
-    console.debug(`In ngOnInit with accessToken ${this.accessToken}`);
     this.reloadCompent()
   }
 
   ngAfterViewInit() {
-    console.debug("in ngAfterViewInit...");
-      this.loadJs(this.boxCdnJS)
-      this.loadCss(this.boxCdnCss)
+    this.loadJs(this.boxCdnJS)
+    this.loadCss(this.boxCdnCss)
   }
 
   private loadCss(href: string):void {
@@ -79,12 +69,9 @@ export class ContentExplorerComponent  {
   }
 
   private initializeComponent(): void { 
-    console.debug("initializeComponent...");
     this.boxComponentInstance = new Box[this.boxComponent]();
 
     this.opts = _.merge({},{container: `#${this.boxComponent.toLowerCase()}`},this.options);
-    console.debug(`this.opts: ${JSON.stringify(this.opts)}`);
-    console.log(this.opts);
     if (this.accessToken !== undefined) {
       this.boxComponentInstance.show(this.entityId, this.accessToken, this.opts);
     }

@@ -10,6 +10,6 @@ i
   providers: [],
   bootstrap: []
 })
-export class ContentUploadMetadModule {
+export class ContentExplorerDemoModule {
 
 }

@@ -3,6 +3,6 @@
         <app-box-folder-input (folderId)="onFolderIdChange($event)"></app-box-folder-input>
     </div>
     <div class="row">
-        <box-component  [entityId]="folderId" [accessToken]="(boxOAuthService.accessToken$ | async) ?? ''" [componentData]="contentUploader"></box-component>
+        <content-upload [entityId]="folderId" [accessToken]="(boxOAuthService.accessToken$ | async) ?? ''" [options]="options"></content-upload>
     </div>
 </div>

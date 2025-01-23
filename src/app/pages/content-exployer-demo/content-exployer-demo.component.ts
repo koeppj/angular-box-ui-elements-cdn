@@ -13,22 +13,23 @@ export class ContentExployerDemoComponent {
 
   folderId = '0';
   contentExplorer = {
-    options: {
-      contentPreviewProps: {
-        contentSidebarProps: {
-          detailsSidebarProps: {
-            hasProperties: true,
-            hasAccessStats: true
-          },
-          hasMetadata: true,
-          hasActivityFeed: true,
-        }
-      },
-      canShare: false,
-    }
+    contentPreviewProps: {
+      contentSidebarProps: {
+        detailsSidebarProps: {
+          hasProperties: true,
+          hasAccessStats: true
+        },
+        hasMetadata: true,
+        hasActivityFeed: true,
+      }
+    },
+    canShare: false,
+    onPreview: (event: any) => this.onFilePreview(event),
   }
 
-  constructor(public boxOAuthService: BoxOauthTokenService) { 
+  constructor(public boxOAuthService: BoxOauthTokenService
+
+  ) { 
   }
 
   onFolderIdChange(folderId: string) {
@@ -37,6 +38,9 @@ export class ContentExployerDemoComponent {
 
   onFilePreview(event: any) 
   {
+    if (this.boxOAuthService.isAuthenticated$) {
+      console.log('Cooking with gas!');
+    }
     console.log('File previewed', event);
   }
 }

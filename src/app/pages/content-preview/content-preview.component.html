@@ -1,8 +1,0 @@
-<div class="p3">
-    <div class="row">
-        <app-box-file-input (fileId)="onFileIdChange($event)"></app-box-file-input>
-    </div>
-    <div class="row">
-        <box-component  [entityId]="fileId" [accessToken]="(boxOAuthService.accessToken$ | async) ?? ''" [componentData]="contentPreview"></box-component>
-    </div>
-</div>
