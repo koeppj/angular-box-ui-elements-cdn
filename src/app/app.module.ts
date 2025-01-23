@@ -10,7 +10,6 @@ import { HeadService } from '@app/services/head.service';
 import { BoxDevTokenPromptComponent } from './components/box-dev-token-prompt/box-dev-token-prompt.component';
 import { BoxTokenService } from './services/box-token.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BoxJwtAccessTokenService } from './services/box-jwt-access-token.service';
 import { PreBoxLoginComponent } from './pages/pre-box-login/pre-box-login.component';
 import { PostBoxLoginComponent } from './pages/post-box-login/post-box-login.component';
 import { BoxOauthStatusComponent } from './components/box-oauth-status/box-oauth-status.component';
@@ -18,8 +17,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BoxFolderInputComponent } from "./components/box-folder-input/box-folder-input.component";
 import { BoxFileInputComponent } from './components/box-file-input/box-file-input.component';
 import { ContentUploadMetadataComponent } from './pages/content-upload-metadata/content-upload-metadata.component';
-import { DisplayBoxResponseModule } from './components/display-box-response/display-box-response.module';
-import { DisplayBoxResponseService } from './components/display-box-response/display-box-service.service';
 import { BoxOauthTokenService } from './services/box-oauth-token.service';
 
 @NgModule({
@@ -42,12 +39,10 @@ import { BoxOauthTokenService } from './services/box-oauth-token.service';
     NgbModule,
     BoxFolderInputComponent,
     BoxFileInputComponent,
-    DisplayBoxResponseModule,
 ],
   providers: [
     HeadService,
     BoxTokenService,
-    BoxJwtAccessTokenService,
     BoxOauthTokenService
   ],
   bootstrap: [AppComponent]

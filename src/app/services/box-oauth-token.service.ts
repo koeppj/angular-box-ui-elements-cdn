@@ -4,9 +4,10 @@ import { BoxTokenStorageService } from './box-token-storage.service';
 import { BoxClient, BoxDeveloperTokenAuth, BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen';
 import { environment } from '@environment/environment';
 import { Router } from '@angular/router';
-import { GetBoxSkillCardsOnFileHeaders } from 'box-typescript-sdk-gen/lib/managers/skills.generated';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BoxOauthTokenService {
 
   private isAuthenticatedSubect$ = new BehaviorSubject<boolean>(false);

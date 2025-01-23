@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DisplayBoxResponseService } from '@app/components/display-box-response/display-box-service.service';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
 import { BoxOauthTokenService } from '@app/services/box-oauth-token.service';
 
@@ -34,12 +33,11 @@ export class ContentExplorerComponent {
 
   public folderId = '0';
 
-  constructor(public boxOAuthService: BoxOauthTokenService, private displayBoxResponseService: DisplayBoxResponseService) {
+  constructor(public boxOAuthService: BoxOauthTokenService ) {
     this.onExplorerPreview = this.onExplorerPreview.bind(this);
   }
 
   public onExplorerPreview(file: any) {
-    this.displayBoxResponseService.showDisplayBoxResponse(file);
     console.log(file);
   }
 
