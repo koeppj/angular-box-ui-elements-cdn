@@ -6,41 +6,31 @@ const _ = require('lodash');
 
 declare let Box: any;
 
-export interface BoxComponentInterface {
-  boxCdnJS: string;
-  boxCdnCss: string;
-  name: BoxComponentsType;
-  options: any
-}
-
 @Component({
     selector: 'box-component',
-    templateUrl: './box.component.html',
-    styleUrls: ['./box.component.scss'],
+    templateUrl: './box-abstract.component.html',
+    styleUrls: ['./box-abstract.component.scss'],
     standalone: false
 })
 
-export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
+export abstract class BoxAbstractComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() accessToken: string | undefined = '';
   @Input() entityId: string | undefined = '0';
-  @Input() componentData: BoxComponentInterface = {
-    boxCdnJS: '',
-    boxCdnCss: '',
-    name: BoxComponentsType.ContentExplorer,
-    options: null
-  };
+  @Input() componentId: string | undefined = 'box-abstact-component';
+  @Input() options: any = {};
   boxToken: string | undefined;
   private subscription!: Subscription;
   private opts!: any;
   private boxComponentInstance!: any;
 
+  abstract readonly boxCdnJS: string;
+  abstract readonly boxCdnCss: string;
+  abstract readonly boxComponent: BoxComponentsType;
+
   constructor(
-    private renderer: Renderer2,
-    private headService: HeadService,
-  ) 
-  {    
-    console.log("Constructing BoxComponent");
-  }
+    protected renderer: Renderer2,
+    protected headService: HeadService,
+  ) { }
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,9 +45,9 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
 
   ngAfterViewInit() {
     console.debug("in ngAfterViewInit...");
-    if (this.componentData.name) {
-      this.loadJs(this.componentData.boxCdnJS)
-      this.loadCss(this.componentData.boxCdnCss)
+    if (this.componentId) {
+      this.loadJs(this.boxCdnJS)
+      this.loadCss(this.boxCdnCss)
     }
   }
 
@@ -66,7 +56,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     const styleElement = this.headService.loadStylesheetLink(this.renderer, href);
 
     styleElement.onerror = () => {
-      console.warn(`Could not load ${this.componentData.name} Stylesheet!`);
+      console.warn(`Could not load ${this.componentId} Stylesheet!`);
     }
   }
 
@@ -84,17 +74,16 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     }
 
     scriptElement.onerror = () => {
-      console.warn(`Could not load ${this.componentData.name} Script!`);
+      console.warn(`Could not load ${this.componentId} Script!`);
     }
   }
 
   private initializeComponent(): void { 
     console.debug("initializeComponent...");
-    this.boxComponentInstance = new Box[this.componentData.name]();
+    this.boxComponentInstance = new Box[this.boxComponent]();
 
-    this.opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
+    this.opts = _.merge({},{container: `#${this.componentId}`},this.options);
     console.debug(`this.opts: ${JSON.stringify(this.opts)}`);
-    console.log(this.opts);
     if (this.accessToken !== undefined) {
       this.boxComponentInstance.show(this.entityId, this.accessToken, this.opts);
     }

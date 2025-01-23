@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 import { BoxComponent } from '@app/components/box-component/box.component';
-import { ContentExplorerComponent } from '@app/pages/content-explorer/content-explorer.component';
 import { ContentUploaderComponent } from '@app/pages/content-uploader/content-uploader.component';
 import { ContentPreviewComponent } from '@app/pages/content-preview/content-preview.component';
 import { HeadService } from '@app/services/head.service';
@@ -18,6 +18,9 @@ import { BoxFolderInputComponent } from "./components/box-folder-input/box-folde
 import { BoxFileInputComponent } from './components/box-file-input/box-file-input.component';
 import { ContentUploadMetadataComponent } from './pages/content-upload-metadata/content-upload-metadata.component';
 import { BoxOauthTokenService } from './services/box-oauth-token.service';
+import { BoxLocalToolsService } from './services/box-local-tools.service';
+import { ContentExployerDemoComponent } from './pages/content-exployer-demo/content-exployer-demo.component';
+import { ContentExplorerComponent } from './components/content-explorer/content-explorer.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { BoxOauthTokenService } from './services/box-oauth-token.service';
     BoxComponent,
     ContentExplorerComponent,
     ContentUploadMetadataComponent,
+    ContentExployerDemoComponent,
     ContentUploaderComponent,
     ContentPreviewComponent,
     BoxDevTokenPromptComponent,
@@ -36,6 +40,7 @@ import { BoxOauthTokenService } from './services/box-oauth-token.service';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     NgbModule,
     BoxFolderInputComponent,
     BoxFileInputComponent,
@@ -43,7 +48,8 @@ import { BoxOauthTokenService } from './services/box-oauth-token.service';
   providers: [
     HeadService,
     BoxTokenService,
-    BoxOauthTokenService
+    BoxOauthTokenService,
+    BoxLocalToolsService
   ],
   bootstrap: [AppComponent]
 })

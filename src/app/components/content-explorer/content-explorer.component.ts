@@ -1,36 +1,28 @@
-import { Component, Renderer2, Input, AfterViewInit, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { HeadService } from '@app/services/head.service';
+import { Component, Input, Renderer2, SimpleChanges } from '@angular/core';
 import { BoxComponentsType } from '@app/enums/box-component-enum';
-import { Subscription } from 'rxjs';
+import { HeadService } from '@app/services/head.service';
 const _ = require('lodash');
 
 declare let Box: any;
 
-export interface BoxComponentInterface {
-  boxCdnJS: string;
-  boxCdnCss: string;
-  name: BoxComponentsType;
-  options: any
-}
-
 @Component({
-    selector: 'box-component',
-    templateUrl: './box.component.html',
-    styleUrls: ['./box.component.scss'],
+    selector: 'content-explorer',
+    templateUrl: './content-explorer.component.html',
+    styleUrls: ['./content-explorer.component.scss'],
     standalone: false
 })
 
-export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
+export class ContentExplorerComponent  {
+
+  boxCdnJS = "https://cdn01.boxcdn.net/platform/elements/21.0.0/en-US/explorer.js";
+  boxCdnCss = "https://cdn01.boxcdn.net/platform/elements/21.0.0/en-US/explorer.css";
+  boxComponent = BoxComponentsType.ContentExplorer;
+
   @Input() accessToken: string | undefined = '';
   @Input() entityId: string | undefined = '0';
-  @Input() componentData: BoxComponentInterface = {
-    boxCdnJS: '',
-    boxCdnCss: '',
-    name: BoxComponentsType.ContentExplorer,
-    options: null
-  };
+  @Input() componentId: string | undefined = 'box-abstact-component';
+  @Input() options: any = {};
   boxToken: string | undefined;
-  private subscription!: Subscription;
   private opts!: any;
   private boxComponentInstance!: any;
 
@@ -39,7 +31,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     private headService: HeadService,
   ) 
   {    
-    console.log("Constructing BoxComponent");
+    console.log("Constructing COntentExplorerComponent");
   }
 
 
@@ -55,10 +47,8 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
 
   ngAfterViewInit() {
     console.debug("in ngAfterViewInit...");
-    if (this.componentData.name) {
-      this.loadJs(this.componentData.boxCdnJS)
-      this.loadCss(this.componentData.boxCdnCss)
-    }
+      this.loadJs(this.boxCdnJS)
+      this.loadCss(this.boxCdnCss)
   }
 
   private loadCss(href: string):void {
@@ -66,7 +56,7 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     const styleElement = this.headService.loadStylesheetLink(this.renderer, href);
 
     styleElement.onerror = () => {
-      console.warn(`Could not load ${this.componentData.name} Stylesheet!`);
+      console.warn(`Could not load ${this.boxComponent} Stylesheet!`);
     }
   }
 
@@ -84,15 +74,15 @@ export class BoxComponent implements AfterViewInit, OnInit, OnChanges {
     }
 
     scriptElement.onerror = () => {
-      console.warn(`Could not load ${this.componentData.name} Script!`);
+      console.warn(`Could not load ${this.boxComponent} Script!`);
     }
   }
 
   private initializeComponent(): void { 
     console.debug("initializeComponent...");
-    this.boxComponentInstance = new Box[this.componentData.name]();
+    this.boxComponentInstance = new Box[this.boxComponent]();
 
-    this.opts = _.merge({},{container: `#${this.componentData.name.toLowerCase()}`},this.componentData.options);
+    this.opts = _.merge({},{container: `#${this.boxComponent.toLowerCase()}`},this.options);
     console.debug(`this.opts: ${JSON.stringify(this.opts)}`);
     console.log(this.opts);
     if (this.accessToken !== undefined) {
